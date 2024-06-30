@@ -1,3 +1,5 @@
+// main.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'game_bloc.dart';
@@ -29,16 +31,44 @@ class ButtonPressGamePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Button Press Game'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buildButtonRow(context, 3),
-            buildButtonRow(context, 4),
-            buildButtonRow(context, 3),
-          ],
-        ),
+      body: BlocBuilder<GameBloc, GameState>(
+        builder: (context, state) {
+          String? message = '';
+
+          if (state is GameInitial) {
+            message =
+                state.message; // Corrigido para acessar a propriedade correta
+          } else if (state is GameInProgress) {
+            message = state.message;
+          } else if (state is GameWon) {
+            message = state.message;
+          } else if (state is GameOver) {
+            message = state.message;
+          }
+
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (message != null && message.isNotEmpty)
+                  Text(
+                    message!,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                SizedBox(height: 20),
+                buildButtonRow(context, 3),
+                buildButtonRow(context, 4),
+                buildButtonRow(context, 3),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
