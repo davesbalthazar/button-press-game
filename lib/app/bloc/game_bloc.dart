@@ -47,6 +47,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   void _startNewRound() {
+    print('START NEW ROUND');
     _timer?.cancel();
     _activeButtonIndexes.clear();
 
