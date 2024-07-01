@@ -1,5 +1,3 @@
-// game_state.dart
-
 part of 'game_bloc.dart';
 
 abstract class GameState extends Equatable {

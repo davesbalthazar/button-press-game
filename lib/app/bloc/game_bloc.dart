@@ -25,9 +25,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   void _onButtonPressed(ButtonPressed event, Emitter<GameState> emit) {
-    print('on button pressed');
-    print(state);
-
     if (state is GameInProgress) {
       List<int> updatedActiveIndexes =
           List.from((state as GameInProgress).activeButtonIndexes);
@@ -50,11 +47,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   void _startNewRound() {
-    print('START NEW ROUND');
     _timer?.cancel();
     _activeButtonIndexes.clear();
 
-    // Escolhe aleatoriamente 'buttonsPerRound' botões para acesar nesta rodada
     while (_activeButtonIndexes.length < buttonsPerRound) {
       int index = random.nextInt(totalButtons);
       if (!_activeButtonIndexes.contains(index)) {

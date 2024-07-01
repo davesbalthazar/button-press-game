@@ -2,8 +2,16 @@ import 'package:button_press_game/app/bloc/game_bloc.dart';
 import 'package:button_press_game/app/widgets/circular_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class ButtonPressGamePage extends StatelessWidget {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
+  void _playSound(String sound) {
+    _audioPlayer.play(AssetSource(sound));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,8 +23,7 @@ class ButtonPressGamePage extends StatelessWidget {
           String? message = '';
 
           if (state is GameInitial) {
-            message =
-                state.message; // Corrigido para acessar a propriedade correta
+            message = state.message;
           } else if (state is GameInProgress) {
             message = state.message;
           } else if (state is GameWon) {
@@ -25,7 +32,11 @@ class ButtonPressGamePage extends StatelessWidget {
             message = state.message;
           }
 
-          print(state);
+          if (state is GameWon) {
+            _playSound('assets/sounds/win.wav');
+          } else if (state is GameOver) {
+            _playSound('assets/sounds/lose.wav');
+          }
 
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -33,14 +44,19 @@ class ButtonPressGamePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (message != null && message.isNotEmpty)
-                  Text(
-                    message!,
+                  DefaultTextStyle(
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.blueAccent,
                     ),
-                    textAlign: TextAlign.center,
+                    child: AnimatedTextKit(
+                      animatedTexts: [
+                        TypewriterAnimatedText(message),
+                      ],
+                      repeatForever: true,
+                      isRepeatingAnimation: false,
+                    ),
                   ),
                 SizedBox(height: 20),
                 buildButtonRow(context, 0, 3),

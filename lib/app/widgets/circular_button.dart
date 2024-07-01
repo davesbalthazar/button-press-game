@@ -1,11 +1,17 @@
-import 'package:button_press_game/app/bloc/game_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:button_press_game/app/bloc/game_bloc.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class CircularButton extends StatelessWidget {
   final int index;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   CircularButton({required this.index});
+
+  void _playSound(String sound) {
+    _audioPlayer.play(AssetSource(sound));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,29 +21,29 @@ class CircularButton extends StatelessWidget {
             state.activeButtonIndexes.contains(index);
 
         return GestureDetector(
-          onTap: () => context.read<GameBloc>().add(
-                ButtonPressed(index),
-              ),
-
-          // isActive
-          //     ? () {
-          //         context.read<GameBloc>().add(ButtonPressed(index));
-          //       }
-          //     : null,
-          child: Container(
-            width: 80,
-            height: 80,
+          onTap: isActive
+              ? () {
+                  _playSound('assets/sounds/click.wav');
+                  context.read<GameBloc>().add(ButtonPressed(index));
+                }
+              : () {
+                  _playSound('assets/sounds/error.wav');
+                },
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            width: 60,
+            height: 60,
             decoration: BoxDecoration(
-              color: isActive ? Colors.green : Colors.grey,
+              color: isActive ? Colors.green : Colors.red,
               shape: BoxShape.circle,
-            ),
-            child: Text(index.toString(),
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: isActive ? Colors.greenAccent : Colors.redAccent,
+                  blurRadius: 10,
+                  spreadRadius: 2,
                 ),
-                textAlign: TextAlign.center),
+              ],
+            ),
           ),
         );
       },
