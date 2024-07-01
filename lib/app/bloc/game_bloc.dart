@@ -25,6 +25,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   void _onButtonPressed(ButtonPressed event, Emitter<GameState> emit) {
+    print('on button pressed');
+    print(state);
+
     if (state is GameInProgress) {
       List<int> updatedActiveIndexes =
           List.from((state as GameInProgress).activeButtonIndexes);

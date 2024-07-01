@@ -1,4 +1,5 @@
 import 'package:button_press_game/app/bloc/game_bloc.dart';
+import 'package:button_press_game/app/widgets/circular_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,6 +25,8 @@ class ButtonPressGamePage extends StatelessWidget {
             message = state.message;
           }
 
+          print(state);
+
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -40,9 +43,9 @@ class ButtonPressGamePage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 SizedBox(height: 20),
-                buildButtonRow(context, 3),
-                buildButtonRow(context, 4),
-                buildButtonRow(context, 3),
+                buildButtonRow(context, 0, 3),
+                buildButtonRow(context, 3, 4),
+                buildButtonRow(context, 7, 3),
               ],
             ),
           );
@@ -51,51 +54,15 @@ class ButtonPressGamePage extends StatelessWidget {
     );
   }
 
-  Widget buildButtonRow(BuildContext context, int count) {
+  Widget buildButtonRow(BuildContext context, int from, int count) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(count, (index) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CircularButton(index: index),
+          child: CircularButton(index: index + from),
         );
       }),
-    );
-  }
-}
-
-class CircularButton extends StatelessWidget {
-  final int index;
-
-  CircularButton({required this.index});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<GameBloc, GameState>(
-      builder: (context, state) {
-        bool isActive = state is GameInProgress &&
-            state.activeButtonIndexes.contains(index);
-
-        return GestureDetector(
-          onTap: () => context.read<GameBloc>().add(
-                ButtonPressed(index),
-              ),
-
-          // isActive
-          //     ? () {
-          //         context.read<GameBloc>().add(ButtonPressed(index));
-          //       }
-          //     : null,
-          child: Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: isActive ? Colors.green : Colors.grey,
-              shape: BoxShape.circle,
-            ),
-          ),
-        );
-      },
     );
   }
 }
