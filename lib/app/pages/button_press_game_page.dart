@@ -59,9 +59,9 @@ class ButtonPressGamePage extends StatelessWidget {
                     ),
                   ),
                 SizedBox(height: 20),
-                buildButtonRow(context, 0, 3),
-                buildButtonRow(context, 3, 4),
-                buildButtonRow(context, 7, 3),
+                buildButtonRow(context, 0, 3, state),
+                buildButtonRow(context, 3, 4, state),
+                buildButtonRow(context, 7, 3, state),
               ],
             ),
           );
@@ -70,13 +70,15 @@ class ButtonPressGamePage extends StatelessWidget {
     );
   }
 
-  Widget buildButtonRow(BuildContext context, int from, int count) {
+  Widget buildButtonRow(
+      BuildContext context, int from, int count, GameState state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(count, (index) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CircularButton(index: index + from),
+          child: CircularButton(
+              index: index + from, isBlinking: state is BlinkingLights),
         );
       }),
     );

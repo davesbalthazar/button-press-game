@@ -3,7 +3,7 @@ part of 'game_bloc.dart';
 abstract class GameState extends Equatable {
   const GameState();
 
-  String? get message => null; // Implementação padrão para todos os estados
+  String? get message => null;
 
   @override
   List<Object?> get props => [];
@@ -13,8 +13,7 @@ class GameInitial extends GameState {
   const GameInitial();
 
   @override
-  String get message =>
-      'Pressione para iniciar o jogo!'; // Mensagem específica para GameInitial
+  String get message => 'Pressione para iniciar o jogo!';
 }
 
 class GameInProgress extends GameState {
@@ -23,8 +22,7 @@ class GameInProgress extends GameState {
   const GameInProgress({required this.activeButtonIndexes});
 
   @override
-  String get message =>
-      'Clique nos botões acesos o mais rápido possível!'; // Mensagem específica para GameInProgress
+  String get message => 'Clique nos botões acesos o mais rápido possível!';
 
   @override
   List<Object?> get props => [activeButtonIndexes];
@@ -46,4 +44,13 @@ class GameOver extends GameState {
 
   @override
   List<Object?> get props => [message];
+}
+
+class BlinkingLights extends GameState {
+  final int blinkCount;
+
+  const BlinkingLights({required this.blinkCount});
+
+  @override
+  List<Object?> get props => [blinkCount];
 }
