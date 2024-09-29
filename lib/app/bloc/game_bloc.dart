@@ -39,7 +39,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (updatedActiveIndexes.isEmpty) {
           _timer?.cancel();
           emit(GameWon(message: 'Parabéns, você venceu!'));
-          add(StartBlinking());
+
+          Future.delayed(Duration(seconds: 1), () {
+            add(StartBlinking());
+
+            // _startNewRound();
+          });
+
+          //add(StartBlinking());
         } else {
           emit(GameInProgress(activeButtonIndexes: updatedActiveIndexes));
         }

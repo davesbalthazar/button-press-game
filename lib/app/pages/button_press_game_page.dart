@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:button_press_game/app/bloc/game_bloc.dart';
 import 'package:button_press_game/app/widgets/circular_button.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,8 @@ class ButtonPressGamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int level = 1;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Button Press Game'),
@@ -31,11 +35,13 @@ class ButtonPressGamePage extends StatelessWidget {
           } else if (state is GameOver) {
             message = state.message;
           }
+          print(state);
 
           if (state is GameWon) {
-            _playSound('assets/sounds/win.wav');
+            // _playSound('assets/sounds/win.wav');
+            _playSound('sounds/win.wav');
           } else if (state is GameOver) {
-            _playSound('assets/sounds/lose.wav');
+            _playSound('sounds/lose.wav');
           }
 
           return Padding(
@@ -59,9 +65,13 @@ class ButtonPressGamePage extends StatelessWidget {
                     ),
                   ),
                 SizedBox(height: 20),
-                buildButtonRow(context, 0, 3, state),
-                buildButtonRow(context, 3, 4, state),
-                buildButtonRow(context, 7, 3, state),
+
+                for (int i = 0; i < 10; i += 3)
+                  buildButtonRow(context, i, 3, state),
+
+                // buildButtonRow(context, 0, 3, state),
+                // buildButtonRow(context, 3, 4, state),
+                // buildButtonRow(context, 7, 3, state),
               ],
             ),
           );

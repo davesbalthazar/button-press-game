@@ -28,12 +28,12 @@ class CircularButton extends StatelessWidget {
         return GestureDetector(
           onTap: isActive
               ? () {
-                  _playSound('assets/sounds/click.wav');
+                  _playSound('sounds/pick.wav');
 
                   context.read<GameBloc>().add(ButtonPressed(index));
                 }
               : () {
-                  _playSound('assets/sounds/error.wav');
+                  _playSound('sounds/error.wav');
                 },
           child: AnimatedContainer(
             duration: Duration(milliseconds: 500),
