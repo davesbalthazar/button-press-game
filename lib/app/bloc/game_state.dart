@@ -19,13 +19,18 @@ class GameInitial extends GameState {
 class GameInProgress extends GameState {
   final List<int> activeButtonIndexes;
 
-  const GameInProgress({required this.activeButtonIndexes});
+  const GameInProgress({
+    required this.activeButtonIndexes,
+    required this.points,
+  });
 
   @override
   String get message => 'Clique nos botões acesos o mais rápido possível!';
 
+  final int points;
+
   @override
-  List<Object?> get props => [activeButtonIndexes];
+  List<Object?> get props => [activeButtonIndexes, points];
 }
 
 class GameWon extends GameState {

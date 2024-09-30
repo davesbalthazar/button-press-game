@@ -8,6 +8,9 @@ part 'game_event.dart';
 part 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
+  int level = 1;
+  int points = 0;
+
   final int totalButtons = 10; // Total de botões disponíveis
   final int buttonsPerRound =
       3; // Quantidade de botões a serem acesos por rodada
@@ -39,6 +42,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (updatedActiveIndexes.isEmpty) {
           _timer?.cancel();
           emit(GameWon(message: 'Parabéns, você venceu!'));
+          level++;
 
           Future.delayed(Duration(seconds: 1), () {
             add(StartBlinking());
@@ -48,7 +52,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
           //add(StartBlinking());
         } else {
-          emit(GameInProgress(activeButtonIndexes: updatedActiveIndexes));
+          emit(GameInProgress(
+              activeButtonIndexes: updatedActiveIndexes, points: points));
         }
       } else {
         emit(GameOver(message: 'Você perdeu!'));
@@ -93,7 +98,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
 
     emit(GameInProgress(
-        activeButtonIndexes: List<int>.from(_activeButtonIndexes)));
+      activeButtonIndexes: List<int>.from(_activeButtonIndexes),
+      points: points,
+    ));
   }
 
   @override
