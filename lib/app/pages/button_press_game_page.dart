@@ -1,10 +1,5 @@
-import 'dart:math';
-
 import 'package:button_press_game/app/bloc/game_bloc.dart';
-import 'package:button_press_game/app/enums/map_type.dart';
-import 'package:button_press_game/app/models/level.dart';
-import 'package:button_press_game/app/models/map.dart';
-import 'package:button_press_game/app/widgets/circular_button.dart';
+import 'package:button_press_game/app/widgets/game_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -16,15 +11,17 @@ class ButtonPressGamePage extends StatelessWidget {
   int level = 1;
 
   List<List<String>> map = [
-    ['X'],
-    ['X', 'X'],
+    // ['X'],
+    // ['X', 'X'],
     ['X', 'X', 'X'],
     ['X', 'X', 'X', 'X'],
-    ['X', 'X'],
-    ['X', 'X'],
+    ['X', 'X', 'X'],
+    //['X', 'X'],
   ];
 
   var j = 0;
+
+  ButtonPressGamePage({super.key});
 
   void _playSound(String sound) {
     _audioPlayer.play(AssetSource(sound));
@@ -32,14 +29,14 @@ class ButtonPressGamePage extends StatelessWidget {
 
   Widget _incrementJ(int increment) {
     j += increment;
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Button Press Game'),
+        title: const Text('Button Press Game'),
       ),
       body: BlocBuilder<GameBloc, GameState>(
         builder: (context, state) {
@@ -72,7 +69,7 @@ class ButtonPressGamePage extends StatelessWidget {
               children: [
                 if (message != null && message.isNotEmpty)
                   DefaultTextStyle(
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.blueAccent,
@@ -85,55 +82,8 @@ class ButtonPressGamePage extends StatelessWidget {
                       isRepeatingAnimation: false,
                     ),
                   ),
-                SizedBox(height: 20),
-
+                const SizedBox(height: 20),
                 ...renderMap(context, map, state),
-
-//                 for (var i = 0; i < map.length; i++) ...[
-//                   buildButtonRow2(context, i + j, map[i], state),
-
-// //                  Text((i + j).toString()),
-//                   _incrementJ(map[i].length),
-//                 ],
-                //buildButtonRow2(context, i + map[i].length, map[i], state),
-
-                // for (var row in map) ...[
-                //   buildButtonRow2(context, row.length, row, state)
-                // ],
-
-                // map.forEach((row) {
-                //   return Text('x');
-                //   //  return buildButtonRow2(context, 0, row, state);
-                // }),
-
-                // map.map((row) {
-                //   return buildButtonRow2(context, 0, row, state);
-                // }).toList(),
-                // map.add(
-                //   GameMap(x: 1, y: 1, mapType: MapType.circle);
-
-// map.add([GameMap(x: 1, y: 1, mapType: MapType.circle)]);
-                // .addAll([
-                // [GameMap(1,1,MapType.circle), GameMap(1,2,MapType.square), GameMap(1,3,MapType.circle), GameMap(1,4,MapType.square)],
-                // [GameMap(2,1,MapType.square), GameMap(2,2,MapType.circle), GameMap(2,3,MapType.square)]);
-
-                // map = [
-                //     ['X', '0', 'X', '0'], // Linha com 4 itens
-                //     ['0', 'X', '0'], // Linha com 3 itens
-                //     ['X', 'X', '0', 'X'], // Linha com 4 itens
-                //     ['0', '0', 'X'], // Linha com 3 itens
-                //   ];
-
-//                print( Level.generateLevel(1).toList().toString() );
-
-                // Text( state.props.points.toString(), style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blueAccent),),;
-
-                // for (int i = 0; i < 10; i += 3)
-                //   buildButtonRow(context, i, 3, state),
-
-                // buildButtonRow(context, 0, 3, state),
-                // buildButtonRow(context, 3, 4, state),
-                // buildButtonRow(context, 7, 3, state),
               ],
             ),
           );
@@ -146,6 +96,15 @@ class ButtonPressGamePage extends StatelessWidget {
       BuildContext context, List<List<String>> map, GameState state) {
     List<Widget> rows = [];
 
+    // Calcula o máximo de itens nas linhas
+    int maxItensInLine = 0;
+    for (var i = 0; i < map.length; i++) {
+      if (map[i].length > maxItensInLine) {
+        maxItensInLine = map[i].length;
+      }
+    }
+    print('maxItensInLine: $maxItensInLine');
+
     int counter = 0;
     // Colunas
     for (var i = 0; i < map.length; i++) {
@@ -153,46 +112,49 @@ class ButtonPressGamePage extends StatelessWidget {
 
       rows.add(Column(
         children: [
-          buildButtonRow2(context, counter, map[i], state),
-          SizedBox(height: 20),
+          buildButtonRow2(context, counter, map[i], maxItensInLine, state),
+          const SizedBox(height: 20),
         ],
       ));
       counter = counter + map[i].length;
-      // return buildButtonRow2(context, i, map[i], state);
-      // Linhas
-      // for (var j = 0; j < map[i].length; j++) {
-      //   print(map[i][j]);
-      // }
     }
 
     return rows;
   }
 
-  Widget buildButtonRow2(
-      BuildContext context, int from, List<String> row, GameState state) {
+  Widget buildButtonRow2(BuildContext context, int from, List<String> row,
+      int maxItemsInLine, GameState state) {
     int i = 0;
+
+    double buttonSizeX =
+        MediaQuery.of(context).size.width * 0.8 / maxItemsInLine;
+    // double buttonSizeY = MediaQuery.of(context).size.height / maxItemsInLine;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: row.map((item) {
         i++;
         return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(4.0),
             child: item[0] == 'X'
-                ? CircularButton(
-                    index: from + i, isBlinking: state is BlinkingLights)
-                : SizedBox());
+                ? GameButton(
+                    index: from + i,
+                    isBlinking: state is BlinkingLights,
+                    width: buttonSizeX,
+                    // height: buttonSizeY,
+                  )
+                : const SizedBox());
       }).toList(),
     );
   }
 
-  Widget buildButtonRow(
-      BuildContext context, int from, int count, GameState state) {
+  Widget buildButtonRow(BuildContext context, int from, int count,
+      int MaxItensInLine, GameState state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(count, (index) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CircularButton(
+          child: GameButton(
               index: index + from, isBlinking: state is BlinkingLights),
         );
       }),

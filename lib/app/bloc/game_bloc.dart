@@ -77,7 +77,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   void _onBlinkTick(BlinkTick event, Emitter<GameState> emit) {
     if (state is BlinkingLights) {
       int blinkCount = (state as BlinkingLights).blinkCount + 1;
-      if (blinkCount >= 100) {
+      if (blinkCount >= 20) {
         _timer?.cancel();
         _startNewRound();
       } else {
@@ -91,7 +91,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     _activeButtonIndexes.clear();
 
     while (_activeButtonIndexes.length < buttonsPerRound) {
-      int index = random.nextInt(totalButtons);
+      int index = random.nextInt(totalButtons) + 1;
       if (!_activeButtonIndexes.contains(index)) {
         _activeButtonIndexes.add(index);
       }
