@@ -1,9 +1,10 @@
 import 'dart:math';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:button_press_game/app/bloc/game_bloc.dart';
+import 'package:soundpool/soundpool.dart';
 
 class GameButton extends StatelessWidget {
   GameButton({
@@ -19,6 +20,8 @@ class GameButton extends StatelessWidget {
     this.inactiveColorShadow = Colors.redAccent,
     this.blinkingColor1 = Colors.black,
     this.blinkingColor2 = Colors.black45,
+    this.playSoundPick,
+    this.playSoundError,
     super.key,
   });
 
@@ -34,11 +37,23 @@ class GameButton extends StatelessWidget {
   final Color inactiveColorShadow;
   final Color blinkingColor1;
   final Color blinkingColor2;
+  final Function? playSoundPick;
+  final Function? playSoundError;
 
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  // final AudioPlayer _audioPlayer = AudioPlayer();
 
-  void _playSound(String sound) {
-    _audioPlayer.play(AssetSource(sound));
+  Soundpool pool = Soundpool.fromOptions(
+    options:
+        const SoundpoolOptions(streamType: StreamType.alarm, maxStreams: 2),
+  );
+
+  void _playSound(String sound) async {
+//    _audioPlayer.play(AssetSource(sound));
+
+    var soundId = await rootBundle.load(sound).then((ByteData soundData) {
+      return pool.load(soundData);
+    });
+    pool.play(soundId);
   }
 
   @override
@@ -52,12 +67,18 @@ class GameButton extends StatelessWidget {
         return GestureDetector(
           onTap: isActive
               ? () {
-                  _playSound('sounds/pick.wav');
+                  // _playSound('sounds/pick.wav');
+                  // _playSound('sounds/pop' +
+                  //     (Random().nextInt(10) + 1).toString() +
+                  //     '.wav');
+                  // _playSound(soundPick);
+                  playSoundPick?.call();
 
                   context.read<GameBloc>().add(ButtonPressed(index));
                 }
               : () {
-                  _playSound('sounds/error.wav');
+                  // _playSound(soundError);
+                  playSoundError?.call();
                 },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 500),
@@ -78,6 +99,9 @@ class GameButton extends StatelessWidget {
                 ),
               ],
             ),
+            child: isActive
+                ? Image.asset('assets/images/marble.png')
+                : Image.asset('assets/images/marble.png'),
           ),
         );
       },

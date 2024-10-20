@@ -34,6 +34,7 @@ class GameInProgress extends GameState {
 }
 
 class GameWon extends GameState {
+  @override
   final String? message;
 
   const GameWon({this.message});
@@ -43,6 +44,7 @@ class GameWon extends GameState {
 }
 
 class GameOver extends GameState {
+  @override
   final String? message;
 
   const GameOver({this.message});
@@ -58,4 +60,13 @@ class BlinkingLights extends GameState {
 
   @override
   List<Object?> get props => [blinkCount];
+}
+
+class Pulsing extends GameState {
+  final int pulsingCount;
+
+  const Pulsing({required this.pulsingCount});
+
+  @override
+  List<Object?> get props => [pulsingCount];
 }
