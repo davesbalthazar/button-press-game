@@ -26,15 +26,15 @@ class _ButtonPressGamePageState extends State<ButtonPressGamePage> {
   int? soundLose;
 
   List<List<String>> map = [
-    // ['X', 'X'],
-    // ['X', 'X', 'X'],
-    // ['X', 'X'],
+    ['X', 'X'],
+    ['X', 'X', 'X'],
+    ['X', 'X'],
 
     // ['X'],
     // ['X', 'X'],
-    ['X', 'X', 'X'],
-    ['X', 'X', 'X', 'X'],
-    ['X', 'X', 'X'],
+    // ['X', 'X', 'X'],
+    // ['X', 'X', 'X', 'X'],
+    // ['X', 'X', 'X'],
     // //['X', 'X'],
 
     // ['X', 'X', 'X', 'X'],
@@ -58,9 +58,13 @@ class _ButtonPressGamePageState extends State<ButtonPressGamePage> {
   // var levelActiveColor = Colors.greenAccent;
   // var levelInactiveColor = Colors.white;
 
-  var levelName = 'snow';
-  var levelActiveColor = Colors.red;
-  var levelInactiveColor = Colors.white;
+  // var levelName = 'snow';
+  // var levelActiveColor = Colors.red;
+  // var levelInactiveColor = Colors.white;
+
+  var levelName = 'relax';
+  var levelActiveColor = Colors.pink;
+  var levelInactiveColor = Colors.blue;
 
   var j = 0;
 
@@ -187,7 +191,7 @@ class _ButtonPressGamePageState extends State<ButtonPressGamePage> {
                     //   ),
                     Spacer(),
 
-                    const SizedBox(height: 20),
+                    // const SizedBox(height: 60),
                     ...renderMap(context, map, state),
                     Spacer(),
                   ],
@@ -221,7 +225,7 @@ class _ButtonPressGamePageState extends State<ButtonPressGamePage> {
       rows.add(Column(
         children: [
           buildButtonRow2(context, counter, map[i], maxItensInLine, state),
-          const SizedBox(height: 20),
+//          const SizedBox(height: 20),
         ],
       ));
       counter = counter + map[i].length;
@@ -238,45 +242,48 @@ class _ButtonPressGamePageState extends State<ButtonPressGamePage> {
     int i = 0;
 
     double buttonSizeX = isPortrait
-        ? MediaQuery.of(context).size.width * 0.7 / maxItemsInLine
-        : MediaQuery.of(context).size.height * 0.7 / maxItemsInLine;
+        ? MediaQuery.of(context).size.width * 0.9 / maxItemsInLine
+        : MediaQuery.of(context).size.height * 0.9 / maxItemsInLine;
     double buttonSizeY = buttonSizeX;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: row.map((item) {
-        i++;
-        return Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: item[0] == 'X'
-                ? GameImageButton(
-                    index: from + i,
-                    isBlinking: state is BlinkingLights,
-                    width: buttonSizeX,
-                    height: buttonSizeY,
-                    isPulsing: false,
-                    activeImage: 'assets/images/levels/$levelName/active.png',
-                    inactiveImage:
-                        'assets/images/levels/$levelName/inactive.png',
-                    activeColorShadow: levelActiveColor,
-                    inactiveColorShadow: levelInactiveColor,
+    return ColoredBox(
+      color: Colors.red,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: row.map((item) {
+          i++;
+          return Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: item[0] == 'X'
+                  ? GameImageButton(
+                      index: from + i,
+                      isBlinking: state is BlinkingLights,
+                      width: buttonSizeX,
+                      height: buttonSizeY,
+                      isPulsing: false,
+                      activeImage: 'assets/images/levels/$levelName/active.png',
+                      inactiveImage:
+                          'assets/images/levels/$levelName/inactive.png',
+                      activeColorShadow: levelActiveColor,
+                      inactiveColorShadow: levelInactiveColor,
 
-                    // isPulsing: true,
-                    // isPulsing: Random().nextInt(10) == 0,
-                    // isPulsing: Random().nextBool(),
-                    //state is Pulsing,
+                      // isPulsing: true,
+                      // isPulsing: Random().nextInt(10) == 0,
+                      // isPulsing: Random().nextBool(),
+                      //state is Pulsing,
 
-                    // shape: BoxShape.rectangle,
+                      // shape: BoxShape.rectangle,
 
-                    playSoundPick: () {
-                      _playSound(soundPick!);
-                    },
-                    playSoundError: () {
-                      _playSound(soundLose!);
-                    },
-                  )
-                : const SizedBox());
-      }).toList(),
+                      playSoundPick: () {
+                        _playSound(soundPick!);
+                      },
+                      playSoundError: () {
+                        _playSound(soundLose!);
+                      },
+                    )
+                  : const SizedBox());
+        }).toList(),
+      ),
     );
   }
 }

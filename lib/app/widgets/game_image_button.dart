@@ -134,15 +134,15 @@ class GameImageButtonState extends State<GameImageButton>
                     _animation.value, // Pulsação no height
                 decoration: BoxDecoration(
                   shape: widget.shape,
-                  boxShadow: [
-                    BoxShadow(
-                      color: isActive
-                          ? widget.activeColorShadow
-                          : widget.inactiveColorShadow,
-                      blurRadius: 20,
-                      spreadRadius: 5,
-                    ),
-                  ],
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: isActive
+                  //         ? widget.activeColorShadow
+                  //         : widget.inactiveColorShadow,
+                  //     blurRadius: 20,
+                  //     spreadRadius: 5,
+                  //   ),
+                  // ],
                 ),
                 child: ClipOval(
                   child: shouldBlink

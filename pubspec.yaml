@@ -70,6 +70,7 @@ flutter:
     - assets/images/levels/
     - assets/images/levels/snow/
     - assets/images/levels/grass/
+    - assets/images/levels/relax/
     - assets/sounds/
 
   # An image asset can refer to one or more resolution-specific "variants", see

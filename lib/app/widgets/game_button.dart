@@ -91,13 +91,13 @@ class GameButton extends StatelessWidget {
                       : blinkingColor2
                   : (isActive ? activeColor : inactiveColor),
               shape: shape,
-              boxShadow: [
-                BoxShadow(
-                  color: isActive ? activeColorShadow : inactiveColorShadow,
-                  blurRadius: 10,
-                  spreadRadius: 2,
-                ),
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: isActive ? activeColorShadow : inactiveColorShadow,
+              //     blurRadius: 10,
+              //     spreadRadius: 2,
+              //   ),
+              // ],
             ),
             child: isActive
                 ? Image.asset('assets/images/marble.png')
